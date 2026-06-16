@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Компиляторы и интерпретаторы</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Принципы функционирования компиляторов и интерпретаторов</h1>
+</header>
+
+<nav id="nav">
+  <button class="active" data-target="intro">Введение</button>
+  <button data-target="theory">Теория</button>
+  <button data-target="architecture">Архитектура</button>
+  <button data-target="practical">Реализация</button>
+  <button data-target="compare">Сравнение</button>
+  <button data-target="conclusion">Заключение</button>
+  <button data-target="refs">Источники</button>
+</nav>
+
+<main>
+
+  <!-- ВВЕДЕНИЕ -->
+  <div class="section active" id="intro">
+    <div class="card">
+      <h2>Введение</h2>
+      <p>Компиляторы и интерпретаторы являются фундаментальными компонентами современных вычислительных систем, обеспечивающими преобразование программного кода в исполняемые инструкции.</p>
+      <p><strong>Компилятор</strong> транслирует исходный код в машинный или промежуточный язык, создавая автономный исполняемый файл. <strong>Интерпретатор</strong> выполняет код построчно, динамически обрабатывая каждую команду.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <span class="badge">Цель</span>
+        <p>Исследование принципов функционирования компиляторов и интерпретаторов на примере разработки собственных реализаций этих инструментов.</p>
+      </div>
+      <div class="card">
+        <span class="badge">Актуальность</span>
+        <p>Активное развитие JIT-компиляции, многопроходной оптимизации и промежуточных представлений (LLVM) делает понимание внутренних механизмов критически важным.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Задачи проекта</h3>
+      <ul>
+        <li>Изучить теоретические основы лексического, синтаксического и семантического анализа</li>
+        <li>Разработать лексер и парсер для построения AST</li>
+        <li>Реализовать интерпретатор для выполнения программ на основе AST</li>
+        <li>Создать компилятор, транслирующий исходный код в C#</li>
+        <li>Проанализировать преимущества и недостатки обоих подходов</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ТЕОРИЯ -->
+  <div class="section" id="theory">
+    <div class="card">
+      <h2>Теоретические аспекты</h2>
+
+      <h3>Терминология</h3>
+      <p><strong>Компилятор</strong> — программная система, преобразующая исходный код на языке высокого уровня в эквивалентный код более низкого уровня. Вся работа выполняется до запуска программы.</p>
+      <p><strong>Интерпретатор</strong> — выполняет исходный код непосредственно, без предварительного преобразования. Процесс выполнения чередуется с анализом очередных участков кода.</p>
+      <p><strong>JIT-компиляция</strong> — гибридный подход, сочетающий компиляцию участков кода непосредственно во время выполнения программы.</p>
+    </div>
+
+    <div class="card">
+      <h3>Историческая эволюция</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">1957</div>
+          <p>Первый компилятор для языка Фортран — группа Джона Бэкуса в IBM. Первая демонстрация автоматического преобразования формул в машинный код.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1958</div>
+          <p>Язык LISP (Джон Маккарти) — первый интерпретатор, где программы могли анализироваться и модифицироваться другими программами.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1960-е</div>
+          <p>Язык Алгол — разработаны методы синтаксического анализа, ставшие основой последующих компиляторов.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1970-е</div>
+          <p>Yacc (Стивен Джонсон) — первая система автоматической генерации компиляторов. Виртуальная машина P-код для Pascal.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1990-е</div>
+          <p>JVM (Java Virtual Machine) — успешное сочетание интерпретации байт-кода с JIT-компиляцией, обеспечившее переносимость и высокую производительность.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- АРХИТЕКТУРА -->
+  <div class="section" id="architecture">
+    <div class="card">
+      <h2>Архитектура интерпретатора</h2>
+      <p>Интерпретатор — это программа, которая выполняет исходный код программы построчно без предварительного преобразования в машинный код.</p>
+
+      <div class="arch-steps">
+        <div class="arch-step">
+          <div class="name">Исходный код</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Лексер</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Парсер</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Интерпретатор</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Архитектура компилятора</h2>
+      <p>Компилятор — это программа, которая преобразует исходный код, написанный на языке высокого уровня, в машинный код (или промежуточный код), который может выполнять компьютер.</p>
+
+      <div class="arch-steps">
+        <div class="arch-step">
+          <div class="name">Исходный код</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Лексер</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Парсер</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Промежуточный код</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Компилятор</div>
+        </div>
+        <div class="arrow-right">→</div>
+        <div class="arch-step">
+          <div class="name">Программа</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Абстрактное синтаксическое дерево (AST)</h3>
+      <p>AST — ключевая структура данных, отражающая иерархию конструкций программы. Оба компонента системы (компилятор и интерпретатор) используют единую кодовую базу для работы с AST.</p>
+    </div>
+  </div>
+
+  <!-- ПРАКТИЧЕСКАЯ РЕАЛИЗАЦИЯ -->
+  <div class="section" id="practical">
+    <div class="card">
+      <h2>Практическая реализация</h2>
+      <p>Разработанная система включает два основных компонента с единой кодовой базой для обработки синтаксических конструкций.</p>
+
+      <a class="link-card" href="https://drive.google.com/file/d/1Gu7LIX59lasqvS9lOitXoxJKeNAz0xNV/view?usp=drivesdk" target="_blank">
+        Исходный код проекта
+      </a>
+    </div>
+
+    <div class="card">
+      <h3>Поддерживаемые конструкции языка</h3>
+      <p>Разработанный язык поддерживает динамическую типизацию с двумя типами данных: числовые (<code>double</code>) и строковые (<code>string</code>).</p>
+
+      <div class="code-block">
+<span class="cmt">// Объявление переменных</span><br>
+<span class="kw">var</span> x = <span class="num">10</span>;<br>
+<span class="kw">var</span> name = <span class="str">"Hello"</span>;<br><br>
+
+<span class="cmt">// Составные операторы присваивания</span><br>
+x += <span class="num">5</span>;<br>
+x -= <span class="num">3</span>;<br>
+x *= <span class="num">2</span>;<br>
+x /= <span class="num">8</span>;<br><br>
+
+<span class="cmt">// Вывод данных</span><br>
+<span class="fn">print</span>(x);<br>
+<span class="fn">print</span>(name);<br><br>
+
+<span class="cmt">// Условные операторы</span><br>
+<span class="kw">if</span> (x > <span class="num">10</span>) {<br>
+  <span class="fn">&emsp;print</span>(<span class="str">"больше десяти"</span>);<br>
+}<br>
+<span class="kw">elif</span> (x == <span class="num">10</span>) {<br>
+  <span class="fn">&emsp;print</span>(<span class="str">"равно десяти"</span>);<br>
+}<br>
+<span class="kw">else</span>{<br>
+  <span class="fn">&emsp;print</span>(<span class="str">"Неизвестно"</span>);<br>
+}
+      </div>
+    </div>
+    <div class="card">
+      <h3>Пример кода в txt файле</h3>
+      <img src="images/code.png" alt="Пример кода" style="width:40%; border-radius:6px; margin-top:8px;" />
+    </div>
+
+    <div class="card">
+      <h3>Запуск интерпретатора</h3>
+      <p>Интерпретатор запускается командой <b>int.exe название_файла.txt</b> и сразу выполняет код, выводя результат в консоль.</p>
+      <img src="images/interpreter.png" alt="Пример кода" style="width:75%; border-radius:6px; margin-top:8px;" />
+    </div>
+
+    <div class="card">
+      <h3>Запуск компилятора</h3>
+      <p>Компилятор запускается командой <b>com.exe название_файла.txt название_файла.exe</b>, генерирует исполняемый файл, который затем запускается отдельно.</p>
+      <img src="images/compiler.png" alt="Пример кода" style="width:100%; border-radius:6px; margin-top:8px;" />
+    </div>
+
+    <div class="card">
+      <h3>Компоненты системы</h3>
+      <div class="grid2">
+        <div>
+          <span class="badge">Компилятор</span>
+          <ul>
+            <li>Полный анализ исходного кода</li>
+            <li>Проверка типов и семантика</li>
+            <li>Генерация исполняемого модуля</li>
+            <li>Оптимизация на этапе компиляции</li>
+          </ul>
+        </div>
+        <div>
+          <span class="badge">Интерпретатор</span>
+          <ul>
+            <li>Построчный анализ и выполнение</li>
+            <li>Проверка типов во время выполнения</li>
+            <li>Прямой обход AST</li>
+            <li>Возможность изменять код на ходу</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Сравнение с существующими решениями</h3>
+      <table>
+        <thead>
+          <tr><th>Характеристика</th><th>Данная система</th><th>CPython</th><th>GCC</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Типизация</td><td>Динамическая</td><td>Динамическая</td><td>Статическая</td></tr>
+          <tr><td>Промежуточный код</td><td>Прямой обход AST</td><td>Байт-код</td><td>IR (GIMPLE)</td></tr>
+          <tr><td>Целевой язык</td><td>C#</td><td>CPython VM</td><td>Машинный код</td></tr>
+          <tr><td>Приведение типов</td><td>Нет</td><td>Частичное</td><td>Явное</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- СРАВНЕНИЕ -->
+  <div class="section" id="compare">
+    <div class="card">
+      <h2>Сравнительный анализ</h2>
+      <h3>Тест производительности: вычисление суммы чисел от 1 до 1 000 000</h3>
+
+      <div style="margin-top: 16px;">
+        <div class="perf-bar-wrap">
+          <div class="perf-label"><b>Время (сек)</b></div>
+          <div style="flex:1;">
+            <div style="font-size:0.78rem; color:#555; margin-bottom:4px;">Компилятор</div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar bar-compiler" style="width: 6%;"></div>
+            </div>
+            <div style="font-size:0.78rem; color:#555; margin-top:4px;">Интерпретатор</div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar bar-interp" style="width: 92.5%;"></div>
+            </div>
+          </div>
+          <div style="width:80px; font-size:0.82rem; text-align:right; color:#555;">
+            <div>0.12 сек</div>
+            <div style="margin-top:22px;">1.85 сек</div>
+          </div>
+        </div><br>
+
+        <div class="perf-bar-wrap">
+          <div class="perf-label"><b>CPU</b></div>
+          <div style="flex:1;">
+            <div style="font-size:0.78rem; color:#555; margin-bottom:4px;">Компилятор</div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar bar-compiler" style="width: 15%;"></div>
+            </div>
+            <div style="font-size:0.78rem; color:#555; margin-top:4px;">Интерпретатор</div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar bar-interp" style="width: 45%;"></div>
+            </div>
+          </div>
+          <div style="width:80px; font-size:0.82rem; text-align:right; color:#555;">
+            <div>15%</div>
+            <div style="margin-top:22px;">45%</div>
+          </div>
+        </div><br>
+
+        <div class="perf-bar-wrap">
+          <div class="perf-label"><b>Память (MB)</b></div>
+          <div style="flex:1;">
+            <div style="font-size:0.78rem; color:#555; margin-bottom:4px;">Компилятор</div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar bar-compiler" style="width: 42%;"></div>
+            </div>
+            <div style="font-size:0.78rem; color:#555; margin-top:4px;">Интерпретатор</div>
+            <div class="perf-bar-bg">
+              <div class="perf-bar bar-interp" style="width: 76%;"></div>
+            </div>
+          </div>
+          <div style="width:80px; font-size:0.82rem; text-align:right; color:#555;">
+            <div>2.1 MB</div>
+            <div style="margin-top:22px;">3.8 MB</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Компилятор</h3>
+        <div class="pros-cons" style="grid-template-columns: 1fr;">
+          <div class="pros">
+            <h4>Преимущества</h4>
+            <ul>
+              <li>Высокая производительность</li>
+              <li>Сложные оптимизации</li>
+              <li>Раннее обнаружение ошибок</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>Недостатки</h4>
+            <ul>
+              <li>Перекомпиляция при изменениях</li>
+              <li>Менее гибкая отладка</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Интерпретатор</h3>
+        <div class="pros-cons" style="grid-template-columns: 1fr;">
+          <div class="pros">
+            <h4>Преимущества</h4>
+            <ul>
+              <li>Быстрый запуск программ</li>
+              <li>Интерактивная работа с кодом</li>
+              <li>Гибкость при отладке</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>Недостатки</h4>
+            <ul>
+              <li>Меньшая производительность</li>
+              <li>Позднее обнаружение ошибок</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ЗАКЛЮЧЕНИЕ -->
+  <div class="section" id="conclusion">
+    <div class="card">
+      <h2>Заключение</h2>
+      <p>В ходе выполнения проекта были разработаны функционирующие компилятор и интерпретатор с поддержкой базовых языковых конструкций.</p>
+
+      <h3>Решённые задачи</h3>
+      <ul>
+        <li>Разработан лексический анализатор с поддержкой динамической типизации</li>
+        <li>Реализован синтаксический анализатор методом рекурсивного спуска</li>
+        <li>Создана система семантического анализа с проверкой типов</li>
+        <li>Построен генератор кода для компилятора</li>
+        <li>Разработан интерпретатор с пошаговым выполнением AST</li>
+      </ul>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <span class="badge">Достоинства</span>
+        <ul>
+          <li>Чёткая модульная архитектура</li>
+          <li>Поддержка динамической типизации</li>
+          <li>Простота и понятность синтаксиса</li>
+          <li>Возможность и компиляции, и интерпретации</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge">Ограничения</span>
+        <ul>
+          <li>Отсутствие поддержки циклов и функций</li>
+          <li>Примитивная система обработки ошибок</li>
+          <li>Ограниченные возможности оптимизации</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Практическое применение</h3>
+      <div class="grid2">
+        <div>
+          <h4 style="color:#0f3460; margin-bottom:6px;">Образование</h4>
+          <p>Демонстрация всех этапов обработки кода — от лексического анализа до генерации исполняемого файла.</p>
+        </div>
+        <div>
+          <h4 style="color:#0f3460; margin-bottom:6px;">Разработка</h4>
+          <p>Платформа для быстрого прототипирования алгоритмов и создания специализированных скриптов.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ИСТОЧНИКИ -->
+  <div class="section" id="refs">
+    <div class="card">
+      <h2>Список литературы</h2>
+      <ol class="ref-list">
+        <li>Ахо А.В., Лам М.С., Сети Р., Ульман Д.Д. Компиляторы: принципы, технологии и инструменты. — М.: Вильямс, 2018.</li>
+        <li>Грис Д. Конструирование компиляторов. — М.: Мир, 1975.</li>
+        <li>Аппель Э. Современная реализация компиляторов на С. — М.: Вильямс, 2002.</li>
+        <li>Backus J. The History of FORTRAN I, II, and III // IEEE Annals of the History of Computing. — 1998.</li>
+        <li>Naur P. et al. Report on the Algorithmic Language ALGOL 60 // Communications of the ACM. — 1960.</li>
+        <li>Johnson S.C. Yacc: Yet Another Compiler-Compiler // Bell Laboratories, 1975.</li>
+        <li>McCarthy J. Recursive Functions of Symbolic Expressions and Their Computation by Machine // Communications of the ACM. — 1960.</li>
+        <li>Wirth N. The Design of a Pascal Compiler // Software: Practice and Experience. — 1971.</li>
+        <li>Lindholm T. et al. The Java Virtual Machine Specification. — Addison-Wesley, 1999.</li>
+        <li>Muchnick S.S. Advanced Compiler Design and Implementation. — Morgan Kaufmann, 1997.</li>
+        <li>Lattner C., Adve V. LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation // CGO'04.</li>
+        <li>Burmako E. Scala Macros: Let Our Powers Combine! // Scala Symposium. — 2013.</li>
+        <li>Aho A. The Structure of a Compiler. — Stanford University, 1986.</li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const buttons = document.querySelectorAll('nav button');
+  const sections = document.querySelectorAll('.section');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      buttons.forEach(b => b.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
